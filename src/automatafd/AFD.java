@@ -6,40 +6,53 @@
 package automatafd;
 
 import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Arc2D;
+import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
+import javax.swing.JTable;
+import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 
 /**
  *
- * @author 404t
+ * @author Josegomz
  */
 public class AFD extends javax.swing.JFrame {
-    Dibujo dibujo;
+    Dibujo dibujo;// clase que dibujara el AFD
+    //contador de estados y de estados finales
     protected int estados;
     int estadosFinales;
+    //contador del tamaño del alfabeto
     int tamAlfabeto;
     
+    //array que contiene el alfabeto
     String alfabeto[];
+    //matriz que tiene la tabla de trancisiones
     int tablaTransiciones[][];
+    //array de los estados finales
     int edoFinales[];
+    //boleano si es o no determinista
     boolean isDeterminist = true;
     /**
      * Creates new form AFD
      */
     public AFD() {
         initComponents();
+        //modifica la tabla
         tblTranciciones.getTableHeader().setDefaultRenderer(new SimpleHeaderRenderer());
         tblTranciciones.setRowHeight(40);
         tblTranciciones.setShowHorizontalLines(true);
         tblTranciciones.setShowVerticalLines(true);
-        
     }
 
     /**
@@ -51,31 +64,38 @@ public class AFD extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel3 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         txtNodos = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         txtEdoFinales = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         txtTamAlfabeto = new javax.swing.JTextField();
         btnLlenarValores = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblTranciciones = new javax.swing.JTable();
+        btnClean = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Automata Finito Determinista");
+        setBackground(new java.awt.Color(255, 255, 153));
         setResizable(false);
 
+        jLabel1.setFont(new java.awt.Font("Lucida Grande", 1, 18)); // NOI18N
         jLabel1.setText("Estados:");
 
+        txtNodos.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
         txtNodos.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtNodosKeyTyped(evt);
             }
         });
 
+        jLabel2.setFont(new java.awt.Font("Lucida Grande", 1, 18)); // NOI18N
         jLabel2.setText("Estados Finales:");
 
+        txtEdoFinales.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
         txtEdoFinales.setSelectionEnd(1);
         txtEdoFinales.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -83,14 +103,18 @@ public class AFD extends javax.swing.JFrame {
             }
         });
 
+        jLabel4.setFont(new java.awt.Font("Lucida Grande", 1, 18)); // NOI18N
         jLabel4.setText("Tamaño del alfabeto:");
 
+        txtTamAlfabeto.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
         txtTamAlfabeto.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtTamAlfabetoKeyTyped(evt);
             }
         });
 
+        btnLlenarValores.setBackground(new java.awt.Color(153, 204, 255));
+        btnLlenarValores.setFont(new java.awt.Font("Lucida Grande", 1, 18)); // NOI18N
         btnLlenarValores.setText("Llenar valores");
         btnLlenarValores.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -111,59 +135,90 @@ public class AFD extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(tblTranciciones);
 
+        btnClean.setBackground(new java.awt.Color(153, 204, 255));
+        btnClean.setFont(new java.awt.Font("Lucida Grande", 1, 18)); // NOI18N
+        btnClean.setText("Limpiar pantalla");
+        btnClean.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCleanActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 540, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(65, 65, 65)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtEdoFinales)
+                                    .addComponent(txtNodos)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtTamAlfabeto)))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnLlenarValores, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnClean, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE))))
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)
+                            .addComponent(txtNodos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(txtEdoFinales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(21, 21, 21)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(txtTamAlfabeto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnLlenarValores, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnClean, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE)
-                                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txtNodos)
-                                    .addComponent(txtEdoFinales, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtTamAlfabeto, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(18, 18, 18)
-                        .addComponent(btnLlenarValores, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(32, Short.MAX_VALUE))
+                .addGap(440, 440, 440)
+                .addComponent(jLabel3)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(btnLlenarValores, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1)
-                            .addComponent(txtNodos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(txtEdoFinales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel4)
-                                .addComponent(txtTamAlfabeto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(124, 124, 124))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel3)
+                .addContainerGap(28, Short.MAX_VALUE))
         );
 
         pack();
@@ -249,6 +304,15 @@ public class AFD extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txtTamAlfabetoKeyTyped
 
+    private void btnCleanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCleanActionPerformed
+        // TODO add your handling code here:
+        txtEdoFinales.setText("");
+        txtNodos.setText("");
+        txtTamAlfabeto.setText("");
+        dtm = new DefaultTableModel();
+        tblTranciciones.setModel(dtm);
+    }//GEN-LAST:event_btnCleanActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -261,7 +325,8 @@ public class AFD extends javax.swing.JFrame {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    //javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    javax.swing.UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
                     break;
                 }
             }
@@ -285,19 +350,20 @@ public class AFD extends javax.swing.JFrame {
     }
     
     public class Dibujo {
-        int posiciones[][]={{50,200},{200,100},{200,350},{350,100},{350,300},{500,200},{200,100},{200,100}};
-        int nodos;
+        //posiciones de los nodos
+        int posiciones[][]={{50,200},{200,100},{200,350},{350,100},{350,300},{500,100},{500,350},{650,200}};
+        
+        //constructor
         public Dibujo(){
-            dibujar();
-            
+            dibujar();  
         }
-
-
+      
         public void dibujar(){
             JFrame t = new JFrame(); 
             t.add(new JComponent() { 
-                private final int ARR_SIZE = 6; 
+            private final int ARR_SIZE = 6; 
 
+                //funcion que dibuja una flecha 
                 void drawArrow(Graphics g1, int x1, int y1, int x2, int y2,String text) { 
                     Graphics2D g = (Graphics2D) g1.create(); 
                     double dx = x2 - x1, dy = y2 - y1; 
@@ -306,12 +372,13 @@ public class AFD extends javax.swing.JFrame {
                     AffineTransform at = AffineTransform.getTranslateInstance(x1, y1); 
                     at.concatenate(AffineTransform.getRotateInstance(angle)); 
                     g.transform(at); 
-                    // Draw horizontal arrow starting in (0, 0) 
                     g.drawLine(25, -4, len-25, -4); 
-                    g.drawString(text, len/2, -4);
+                    g.drawString(text, len/2, -8);
                     g.fillPolygon(new int[] {len-25, len-25-ARR_SIZE, len-25-ARR_SIZE, len-25}, 
                     new int[] {-4, -ARR_SIZE-4, ARR_SIZE-4, -4}, 4); 
-                } 
+                }
+                
+                //dibuja un circulo normal con el nombre de la clase adentro
                 public void drawCenteredCircle(Graphics g, int x, int y, int r,String text) {
                     g.drawString(text, x-10, y+5);
                     x = x-(r/2);
@@ -319,6 +386,8 @@ public class AFD extends javax.swing.JFrame {
                     g.drawOval(x,y,r,r);
 
                 }
+                
+                //dibuja doble circulo como los estados finales
                 public void drawCenteredCircleDouble(Graphics g, int x, int y, int r,String text) {
                     g.drawString(text, x-10, y+5);
                     int x1 = x-(r/2);
@@ -328,6 +397,8 @@ public class AFD extends javax.swing.JFrame {
                     g.drawOval(x1,y1,r,r);
                     g.drawOval(x2,y2,r-4,r-4);
                 }
+                
+                //cuando funa flecha apunta al mismo nodo
                 public void drawArrowCurve(Graphics g1, int x, int y,String text) {
                     BasicStroke wideStroke =new BasicStroke();
                     Graphics2D g = (Graphics2D) g1.create(); 
@@ -336,39 +407,78 @@ public class AFD extends javax.swing.JFrame {
                     g.fillRect(x-13, y-28, 7, 7);
                     g.drawString(text, x-15, y-60);
                 }
-                public void paintComponent(Graphics g) {             
+                
+                //dibuja los componentes
+                public void paintComponent(Graphics g) {  
+                    g.setColor(new java.awt.Color(254,254,203));
+                    g.fillRect(0, 0, 700, 450);
+                    g.setColor(Color.BLACK);
+                    //EL ESTADO INICIAL
                     drawArrow(g, -25, 200, 50, 200,""); 
                         
                     //dibujar los nodos
                     for(int i = 0; i<estados;i++){
-                        for(int j=0;j<estadosFinales;j++){
-                            if(i==edoFinales[j]){
-                                drawCenteredCircleDouble(g, posiciones[i][0],posiciones[i][1], 50,"Q"+i);
-                            }
-                            else{
-                                drawCenteredCircle(g, posiciones[i][0],posiciones[i][1], 50,"Q"+i);
-                            }
-                        }  
+                        //si no hay estados finales
+                        if(estadosFinales<=0){
+                            drawCenteredCircle(g, posiciones[i][0],posiciones[i][1], 50,"Q"+i);
+                        }
+                        //en caso de que si hay
+                        else{
+                            for(int j=0;j<estadosFinales;j++){
+                                if(i==edoFinales[j]){
+                                    drawCenteredCircleDouble(g, posiciones[i][0],posiciones[i][1], 50,"Q"+i);
+                                }
+                                else{
+                                    drawCenteredCircle(g, posiciones[i][0],posiciones[i][1], 50,"Q"+i);
+                                }
+                            } 
+                        }
                     }
                     // dibujar las conexiones 
                     for(int i=0; i<estados;i++){
+                        //array que guarda el alfabeto que ya se utilizó por nodo
+                        boolean usados[]= new boolean[tamAlfabeto];
+                        for(int j = 0; j<tamAlfabeto;j++)
+                            usados[j]=false;
+                        //itera alfabeto por alfabeto
                         for(int j=0;j<tamAlfabeto;j++){
-                            if(tablaTransiciones[i][j]<0){
-                                isDeterminist=false;
+                            String cadenaUnion=alfabeto[j];
+                            //si ya se uso un alfabeto en medio o al final ya no se usa de nuevo
+                            if(usados[j]==true){
+                                continue;
                             }
                             else{
-                                if(i==tablaTransiciones[i][j]){
-                                    drawArrowCurve(g, posiciones[i][0], posiciones[i][1],alfabeto[j]); 
+                                //compara si un alfabeto no tiene conectado a un nodo
+                                if(tablaTransiciones[i][j]<0){
+                                    isDeterminist=false;
                                 }
                                 else{
-                                    drawArrow(g, posiciones[i][0], posiciones[i][1],posiciones[tablaTransiciones[i][j]][0], posiciones[tablaTransiciones[i][j]][1],alfabeto[j]); 
+                                    //busca si otro alfabeto va hacia el mismo nodo
+                                    for(int k=j+1;k<tamAlfabeto;k++){
+                                        if(tablaTransiciones[i][j]==tablaTransiciones[i][k]){
+                                            cadenaUnion += ","+alfabeto[k];
+                                            usados[k]=true;
+                                        }
+                                    }
+                                    //dicho lo contrario
+                                    //si el nodo vuelve a si mismo
+                                    if(i==tablaTransiciones[i][j]){
+                                        drawArrowCurve(g, posiciones[i][0], posiciones[i][1],cadenaUnion); 
+                                    }
+                                    //si el nodo pasa a otro
+                                    else{
+                                        drawArrow(g, posiciones[i][0], posiciones[i][1],posiciones[tablaTransiciones[i][j]][0], posiciones[tablaTransiciones[i][j]][1],cadenaUnion); 
+                                    }
                                 }
                             }
                         }
                     }
+                     g.setFont(new Font("TimesRoman", Font.PLAIN, 22));
                     if(isDeterminist){
+                        g.setColor(new java.awt.Color(15, 160, 0));
                         g.drawString("Es un automata finito determinista",20 ,20);
                     }else{
+                        g.setColor(new java.awt.Color(200, 0, 0));
                         g.drawString("No es un automata finito determinista",20 ,20);
                     }
                     
@@ -376,21 +486,54 @@ public class AFD extends javax.swing.JFrame {
                     //drawArrowCurve(g, 200, 200,"b");           
                 } 
             }); 
-            t.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
-            t.setLocationRelativeTo(null);
-            t.setSize(700, 450); 
+            switch(estados){
+                case 1:
+                    t.setSize(350, 300);
+                    break;
+                case 2:case 3:
+                    t.setSize(400, 300);
+                    break;
+                    case 4:case 5:
+                    t.setSize(550, 450);
+                    break;
+                default:
+                    t.setSize(700, 450); 
+                    break;        
+            }
+            t.setTitle("Automata Finito || grafica");
+            //t.setBackground(Color.yellow);
+            t.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
+            t.setLocationRelativeTo(t);
             t.setVisible(true); 
         } 
     } 
+    
+    class SimpleHeaderRenderer extends JLabel implements TableCellRenderer {
+        public SimpleHeaderRenderer() {
+            setFont(new Font("Consolas", Font.BOLD, 16));
+            setForeground(Color.BLACK);
+            setBorder(BorderFactory.createEtchedBorder());
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                boolean isSelected, boolean hasFocus, int row, int column) {
+            setText(value.toString());
+            return this;
+        }
+
+    }
 
     //variables
     private DefaultTableModel dtm;
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnClean;
     private javax.swing.JButton btnLlenarValores;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblTranciciones;
     private javax.swing.JTextField txtEdoFinales;
